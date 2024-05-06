@@ -1,4 +1,4 @@
-#running on python 3.10 with ray version 2.20
+#running on python 3.8.10 with ray version 2.20
 
 # RL algorithm
 from ray.rllib.algorithms.ppo import PPOConfig

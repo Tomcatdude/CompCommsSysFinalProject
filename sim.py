@@ -61,27 +61,41 @@ class EdgeStats:
             color (int): a color to be used for the request
         """
 
-        self.__hts[color] = req.ht
-       
+        self.__slots[color]=req
+        self.__hts[color]=req.ht
         return
 
     def remove_requests(self):
         """update self.__slots by removing the leaving requests based on self.__hts; Also, self.__hts should be updated in this function.
         """
-        self.__hts = [(holding_time-1) if holding_time > 0 else 0 for holding_time in self.__hts] #decrement each holding time, unless it is already free (0)
+        for i in range(5):
+          if self.__hts[i] == 1:
+            self.__slots[i] = None
+            self.__hts[i] -=1
+          elif self.__hts[i] == 0:
+            pass
+          else:
+            self.__hts[i] -=1
 
-        return
 
     def get_available_colors(self) -> list[int]:
         """return a list of integers available to accept requests
         """
-        return list(np.where(np.array(self.__hts) == 0)[0]) #find indexes of where the holding time is 0 (free), then turn back into list from numpy array
+        returnV = []
+        for i in range(len(self.__hts)):
+          if self.__slots[i] is None :
+            returnV.append(i)
+        return returnV
     
     def show_spectrum_state(self):
         """Come up with a representation to show the utilization state of a link (by colors)
         """
-        return (5-len(self.get_available_colors()))/5
-    
+        n=0
+        for i in self.__slots:
+          if i == None:
+            n+=1
+        return (10-n)/10
+
 
 def generate_requests(num_reqs: int) -> list[Request]:
     """Generate a set of requests, given the number of requests and an optical network (topology)
@@ -96,25 +110,11 @@ def generate_requests(num_reqs: int) -> list[Request]:
 
     min_ht = 4
     max_ht = 10
-    #requests = [Request(0,4,random.randint(min_ht,max_ht)) for _ in range(num_reqs)] #for setting destination to 4
+    requests = [Request(0,4,random.randint(min_ht,max_ht)) for _ in range(num_reqs)] #for setting destination to 4
     #requests = [Request(0,np.random.randint(1,5),random.randint(min_ht,max_ht)) for _ in range(num_req)] #for finding random destination
     
     #a4 assignment review
-    requests = [
-        Request(0,4,4), #1
-        Request(0,4,4), #2
-        Request(0,4,4), #3
-        Request(0,4,10), #4
-        Request(0,4,10), #5
-        Request(0,4,10), #6
-        Request(0,4,10), #7
-        Request(0,4,10), #8
-        Request(0,4,10), #9
-        Request(0,4,10), #10
-        Request(0,4,10), #11
-        Request(0,4,10), #12
-        Request(0,4,10), #13
-    ]
+
 
     return requests
 

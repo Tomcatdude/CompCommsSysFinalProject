@@ -26,10 +26,8 @@ class NetworkEnvOptic(gym.Env):
     def _generate_req(self):
         # a request (indicating the capacity required to host this request)
         keys = list(self._nodes.keys())
-        s = choice(keys)
-        d = choice(keys)
-        while s == d:
-            d = choice(keys)
+        s = 'San Diego Supercomputer Center'
+        d = 'Jon Von Neumann Center, Princeton, NJ'
         
         min_ht = 10
         max_ht = 20
@@ -74,7 +72,7 @@ class NetworkEnvOptic(gym.Env):
             self._nodes[node] = i
         
         #initialize edge stats
-        self._num_colors = 5
+        self._num_colors = 10
         self._edge_stats = {}
         for edge in self._G.edges:
             self._edge_stats[edge] = np.array([0] * self._num_colors)
@@ -183,7 +181,7 @@ class NetworkEnvOptic(gym.Env):
             return True #it was correct, return true
         return False
     
-    #adds the amount of currently utilized edges to the utilization score (we will use divide by 5, 100, and 15 later to get network-wide utilization)
+    #adds the amount of currently utilized edges to the utilization score (we will use divide by 10, 100, and 15 later to get network-wide utilization)
     def _update_utilization(self):
         for edge,stats in self._edge_stats.items(): #go trhough each item in edge stats dictionary
             for color,ht in enumerate(stats): #go through every color's stats in the edge

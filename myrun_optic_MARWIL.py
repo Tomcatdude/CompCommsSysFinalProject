@@ -1,13 +1,14 @@
 #running on python 3.8.10 with ray version 2.20
 
 # RL algorithm
-from ray.rllib.algorithms.ppo import PPOConfig
+from ray.rllib.algorithms.marwil import MARWILConfig
 import ray
 # to use a custom env
 from ray.tune.registry import register_env
 
 # my custom env
-from net_env_optic_2 import NetworkEnvOptic
+#from net_env_optic_2_random_route import NetworkEnvOptic #choose for random routes
+from net_env_optic_2_single_route import NetworkEnvOptic #choose for single route
 import numpy as np
 
 # Just to suppress
@@ -25,22 +26,13 @@ register_env('netenv-v0', env_creator)
 
 
 # Set up RL 
-config = (PPOConfig()
-          .training(gamma=0.0, lr=0.003)
+config = (MARWILConfig()
+          .training(beta=1.0, gamma=0.0, lr=0.003)
           .environment(env='netenv-v0')
           .resources(num_gpus=1)
         )
 
 algo = config.build()
-
-
-blconfig = (PPOConfig()
-          .training(gamma=0.999, lr=0.0)
-          .environment(env='netenv-v0')
-          .resources(num_gpus=0)
-        )
-
-baseline = blconfig.build()
 
 for i in range(15):
     print(f'iteration: {i}')

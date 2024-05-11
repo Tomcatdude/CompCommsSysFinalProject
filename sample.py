@@ -18,7 +18,7 @@ for node1 in G.nodes:
                 edge_paths.append(path)
 
 print(len(edge_paths))
-print(len(G.nodes))
+print(G.nodes)
 
 
 #nodes = nx.dijkstra_path(G,'Denver','New York')#shortest path

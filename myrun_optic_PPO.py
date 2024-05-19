@@ -34,7 +34,7 @@ config = (PPOConfig()
 
 algo = config.build()
 
-for i in range(15):
+for i in range(10):
     print(f'iteration: {i}')
     results = algo.train()
     #baseline.train()

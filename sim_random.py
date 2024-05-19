@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import random
+from random import choice
 import matplotlib.pyplot as plt
 #blocked_route = 0
 class Request:

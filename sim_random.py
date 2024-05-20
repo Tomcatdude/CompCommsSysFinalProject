@@ -86,7 +86,7 @@ class EdgeStats:
         return (10-n)/10
 
 
-def generate_requests(num_reqs: int, g: nx.Graph) -> list[Request]:
+def generate_requests(num_reqs: int, g) -> list[Request]:
     """Generate a set of requests, given the number of requests and an optical network (topology)
 
     Args:
@@ -96,9 +96,15 @@ def generate_requests(num_reqs: int, g: nx.Graph) -> list[Request]:
     Returns:
         list[Request]: a list of request instances
     """
+
+    s = choice(g)
+    d = choice(g)
+    while s == d:
+      d = choice(g)
+
     returnV = []
     for i in range(num_reqs):
-      returnV.append(Request('San Diego Supercomputer Center','Jon Von Neumann Center, Princeton, NJ',np.random.randint(10, 20)))
+      returnV.append(Request(s,d,np.random.randint(10, 20)))
     return returnV
 
 
@@ -156,7 +162,10 @@ if __name__ == "__main__":
 
     # 2. generate a list of requests (num_reqs)
     # we simulate the sequential arrivals of the pre-generated requests using a for loop in this simulation
-    requests = generate_requests(100,G)
+    key = {}
+    for i, node in enumerate(G.nodes):
+      key[i] = node
+    requests = generate_requests(100,key)
 
     # 3. prepare an EdgeStats instance for each edge.
     EdgeStatsL = []
@@ -172,12 +181,11 @@ if __name__ == "__main__":
       # 4.2 remove all requests that exhausted their holding times (use remove_requests)
       objt = 0
       for i in range(len(EdgeStatsL)):
-        objt+=temp.show_spectrum_state()
         temp = EdgeStatsL[i]
+        objt+=temp.show_spectrum_state()
         temp.remove_requests()
         EdgeStatsL[i] = temp
       objt = objt/len(EdgeStatsL)
       obj += objt
 
     print(obj/100)
-    
